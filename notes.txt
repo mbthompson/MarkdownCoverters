@@ -1,0 +1,3 @@
+This is a simple text file.
+It includes multiple lines.
+Here's some example writing.
