@@ -4,7 +4,11 @@ A brief description of the project.
 
 ## Installation
 
-Instructions on installing.
+Install Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
