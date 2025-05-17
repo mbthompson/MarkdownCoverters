@@ -42,4 +42,11 @@ Example session:
 
     This is *Markdown*.
     [Ctrl-D]
-    PDF created: output.pdf
+PDF created: output.pdf
+
+## macOS Launcher
+
+This directory includes a bundled macOS application and its AppleScript source to simplify launching:
+
+- **MarkdownToPDF.app**: Double-click this app to open Terminal and automatically run `MarkdownToPDF.py`.
+- **MarkdownToPDF.scpt**: The AppleScript source for the launcher. Open and edit this in Script Editor to customize the launch command.

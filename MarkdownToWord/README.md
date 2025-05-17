@@ -53,3 +53,9 @@ This is *Markdown*.
 [Ctrl-D]
 DOCX created: output.docx
 ```
+## macOS Launcher
+
+This directory includes a bundled macOS application and its AppleScript source to simplify launching:
+
+- **MarkdownToWord.app**: Double-click this app to open Terminal and automatically run `MarkdownToWord.py`.
+- **MarkdownToWord.scpt**: The AppleScript source for the launcher. Open and edit this in Script Editor to customize the launch command.

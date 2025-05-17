@@ -59,3 +59,9 @@ This is *Markdown*.
 LaTeX created: output.tex
 PDF created: output.pdf
 ```
+## macOS Launcher
+
+This directory includes a bundled macOS application and its AppleScript source to simplify launching:
+
+- **MarkdownToLatex.app**: Double-click this app to open Terminal and automatically run `MarkdownToLatex.py`.
+- **MarkdownToLatex.scpt**: The AppleScript source for the launcher. Open and edit this in Script Editor to customize the launch command.
