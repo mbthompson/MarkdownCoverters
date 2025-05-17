@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+
+# ignore generated document files and logs
+*.pdf
+*.docx
+*.rtf
+*.aux
+*.log
+*.toc
+*.fls
+*.fdb_latexmk
+
+# macOS
+.DS_Store
