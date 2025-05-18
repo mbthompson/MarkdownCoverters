@@ -1,2 +1,0 @@
-Hello GitHub Desktop!
-This file confirms that new files in the repository root are visible in GitHub Desktop.
