@@ -11,11 +11,12 @@ import sys
 import os
 import shutil
 import subprocess
+import datetime
 
 def get_unique_filename(basename):
     """
     Generate a filename that does not overwrite existing files.
-    E.g., for basename 'output.docx', returns 'output.docx' or 'output-1.docx', etc.
+    E.g., for basename '20250525.docx', returns '20250525.docx' or '20250525-1.docx', etc.
     """
     base, ext = os.path.splitext(basename)
     if ext == '':
@@ -47,7 +48,8 @@ def main():
         sys.exit("No input received. Exiting.")
 
     # Determine output DOCX filename
-    default_docx = 'output.docx'
+    today_str = datetime.date.today().strftime('%Y%m%d')
+    default_docx = f'{today_str}.docx'
     output_docx = get_unique_filename(default_docx)
 
     # Convert Markdown to DOCX via Pandoc (read from stdin to avoid temp-file permission issues)

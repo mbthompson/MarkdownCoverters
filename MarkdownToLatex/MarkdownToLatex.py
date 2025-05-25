@@ -11,11 +11,12 @@ import sys
 import os
 import shutil
 import subprocess
+import datetime
 
 def get_unique_filename(basename):
     """
     Generate a filename that does not overwrite existing files.
-    E.g., for basename 'output.tex', returns 'output.tex' or 'output-1.tex', etc.
+    E.g., for basename '20250525.tex', returns '20250525.tex' or '20250525-1.tex', etc.
     """
     base, ext = os.path.splitext(basename)
     if ext == '':
@@ -47,7 +48,8 @@ def main():
         sys.exit("No input received. Exiting.")
 
     # Determine output TEX filename
-    default_tex = 'output.tex'
+    today_str = datetime.date.today().strftime('%Y%m%d')
+    default_tex = f'{today_str}.tex'
     output_tex = get_unique_filename(default_tex)
 
     # Convert Markdown to LaTeX via Pandoc (read from stdin to avoid temp-file permission issues)
