@@ -4,6 +4,7 @@ __pycache__/
 # ignore generated document files and logs
 *.pdf
 *.docx
+*.tex
 *.rtf
 *.aux
 *.log
