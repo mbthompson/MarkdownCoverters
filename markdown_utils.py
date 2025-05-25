@@ -10,6 +10,7 @@ import os
 import shutil
 import subprocess
 import datetime
+import json
 
 
 def get_unique_filename(basename):
@@ -146,3 +147,131 @@ def run_pdflatex(tex_file, output_dir):
         return True, pdf_file
     except subprocess.CalledProcessError as e:
         return False, None
+
+
+def get_default_config():
+    """Return default configuration settings."""
+    return {
+        "global": {
+            "save_markdown_source": True,
+            "auto_open_output": False,
+            "output_naming": "date"
+        },
+        "pdf": {
+            "geometry": {
+                "margin": "1in",
+                "paper": "letter"
+            },
+            "font": {
+                "family": "Times New Roman",
+                "size": "12pt"
+            }
+        },
+        "docx": {
+            "font": {
+                "family": "Times New Roman", 
+                "size": "12pt"
+            }
+        },
+        "latex": {
+            "geometry": {
+                "margin": "1in",
+                "paper": "letter"
+            },
+            "font": {
+                "family": "Times New Roman",
+                "size": "12pt"
+            },
+            "document_class": "article",
+            "compile_pdf": True
+        }
+    }
+
+
+def load_config():
+    """
+    Load configuration from file with fallback to defaults.
+    
+    Searches for config files in this order:
+    1. ./.markdown-converter.json (current directory)
+    2. ~/.markdown-converter.json (home directory)
+    3. Default configuration (built-in)
+    
+    Returns:
+        dict: Configuration settings
+    """
+    default_config = get_default_config()
+    
+    # Try current directory first
+    config_paths = [
+        "./.markdown-converter.json",
+        os.path.expanduser("~/.markdown-converter.json")
+    ]
+    
+    for config_path in config_paths:
+        if os.path.exists(config_path):
+            try:
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    user_config = json.load(f)
+                    # Merge user config with defaults (user config takes precedence)
+                    merged_config = default_config.copy()
+                    for section, settings in user_config.items():
+                        if section in merged_config:
+                            if isinstance(settings, dict):
+                                merged_config[section].update(settings)
+                            else:
+                                merged_config[section] = settings
+                        else:
+                            merged_config[section] = settings
+                    return merged_config
+            except (json.JSONDecodeError, IOError) as e:
+                print(f"Warning: Failed to load config from {config_path}: {e}")
+                continue
+    
+    # Return defaults if no valid config file found
+    return default_config
+
+
+def build_pandoc_args(base_args, format_config):
+    """
+    Build pandoc arguments from base args and configuration.
+    
+    Args:
+        base_args: List of base pandoc arguments
+        format_config: Configuration dict for the specific format
+        
+    Returns:
+        List: Complete pandoc arguments with config applied
+    """
+    args = base_args.copy()
+    
+    # Add geometry settings for PDF and LaTeX
+    if 'geometry' in format_config:
+        geometry = format_config['geometry']
+        margin = geometry.get('margin', '1in')
+        paper = geometry.get('paper', 'letter')
+        geometry_str = f"margin={margin},paper={paper}"
+        
+        # Replace existing geometry argument or add new one
+        geometry_found = False
+        for i, arg in enumerate(args):
+            if arg == '-V' and i + 1 < len(args) and args[i + 1].startswith('geometry:'):
+                args[i + 1] = f'geometry:{geometry_str}'
+                geometry_found = True
+                break
+        
+        if not geometry_found:
+            args.extend(['-V', f'geometry:{geometry_str}'])
+    
+    # Add font settings
+    if 'font' in format_config:
+        font = format_config['font']
+        family = font.get('family')
+        size = font.get('size')
+        
+        if family:
+            args.extend(['-V', f'mainfont:{family}'])
+        if size:
+            args.extend(['-V', f'fontsize:{size}'])
+    
+    return args
