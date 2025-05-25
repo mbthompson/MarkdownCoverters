@@ -69,6 +69,30 @@ def get_dated_filename(output_dir, extension):
     return get_unique_filename(default_file)
 
 
+def save_markdown_file(markdown_text, output_file_path):
+    """
+    Save the input markdown text as a .md file with the same base name as the output file.
+    
+    Args:
+        markdown_text: String containing the markdown content
+        output_file_path: Path to the converted output file (e.g., 'PDF/20250525.pdf')
+        
+    Returns:
+        str: Path to the saved markdown file
+    """
+    # Get the base name without extension and change extension to .md
+    base_path = os.path.splitext(output_file_path)[0]
+    md_filename = f"{base_path}.md"
+    
+    try:
+        with open(md_filename, 'w', encoding='utf-8') as f:
+            f.write(markdown_text)
+        return md_filename
+    except Exception as e:
+        print(f"Warning: Failed to save markdown file {md_filename}: {e}")
+        return None
+
+
 def run_pandoc(command_args, markdown_text):
     """
     Run pandoc with the given command arguments and markdown input.

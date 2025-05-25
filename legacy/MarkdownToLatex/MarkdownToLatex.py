@@ -12,7 +12,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from markdown_utils import (
     check_pandoc, check_pdflatex, get_markdown_input, ensure_output_dir, 
-    get_dated_filename, run_pandoc, run_pdflatex
+    get_dated_filename, run_pandoc, run_pdflatex, save_markdown_file
 )
 
 def main():
@@ -33,7 +33,12 @@ def main():
         markdown_text
     )
     
+    # Save the markdown source file
+    md_file = save_markdown_file(markdown_text, output_tex)
+    
     print(f"LaTeX created: {output_tex}")
+    if md_file:
+        print(f"Markdown saved: {md_file}")
     
     # Attempt to compile the generated .tex to PDF
     if check_pdflatex():

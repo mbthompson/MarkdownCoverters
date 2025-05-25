@@ -13,7 +13,7 @@ import subprocess
 from markdown_utils import (
     get_unique_filename, check_pandoc, check_pdflatex, 
     get_markdown_input, ensure_output_dir, get_dated_filename, 
-    run_pandoc, run_pdflatex
+    run_pandoc, run_pdflatex, save_markdown_file
 )
 
 def check_dependencies():
@@ -63,6 +63,11 @@ def convert_to_pdf(markdown_text):
         markdown_text
     )
     
+    # Save the markdown source file
+    md_file = save_markdown_file(markdown_text, output_pdf)
+    if md_file:
+        print(f"📝 Markdown saved: {md_file}")
+    
     return output_pdf
 
 def convert_to_word(markdown_text):
@@ -75,6 +80,11 @@ def convert_to_word(markdown_text):
         ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx],
         markdown_text
     )
+    
+    # Save the markdown source file
+    md_file = save_markdown_file(markdown_text, output_docx)
+    if md_file:
+        print(f"📝 Markdown saved: {md_file}")
     
     return output_docx
 
@@ -90,6 +100,11 @@ def convert_to_latex(markdown_text, has_pdflatex):
     )
     
     print(f"✅ LaTeX created: {output_tex}")
+    
+    # Save the markdown source file
+    md_file = save_markdown_file(markdown_text, output_tex)
+    if md_file:
+        print(f"📝 Markdown saved: {md_file}")
     
     # Attempt to compile the generated .tex to PDF
     if has_pdflatex:
