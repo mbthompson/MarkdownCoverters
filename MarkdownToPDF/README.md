@@ -32,7 +32,7 @@ Step-by-step:
        ./MarkdownToPDF.py
 4. Paste or type your Markdown text.
 5. Press Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows) to finish input.
-6. The script writes a PDF named with the current date (e.g. `20250523.pdf`, or `20250523-1.pdf`, etc., if a file with the same name already exists) in the current directory.
+6. The script creates a `PDF/` folder and writes a PDF named with the current date (e.g. `PDF/20250523.pdf`, or `PDF/20250523-1.pdf`, etc., if a file with the same name already exists).
 
 Example session:
     $ ./MarkdownToPDF.py
@@ -42,7 +42,7 @@ Example session:
 
     This is *Markdown*.
     [Ctrl-D]
-PDF created: 20250523.pdf
+PDF created: PDF/20250523.pdf
 
 ## macOS Launcher
 

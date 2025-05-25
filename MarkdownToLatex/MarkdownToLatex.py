@@ -47,9 +47,13 @@ def main():
     if not markdown_text.strip():
         sys.exit("No input received. Exiting.")
 
+    # Ensure output directory exists
+    output_dir = 'LaTeX'
+    os.makedirs(output_dir, exist_ok=True)
+    
     # Determine output TEX filename
     today_str = datetime.date.today().strftime('%Y%m%d')
-    default_tex = f'{today_str}.tex'
+    default_tex = os.path.join(output_dir, f'{today_str}.tex')
     output_tex = get_unique_filename(default_tex)
 
     # Convert Markdown to LaTeX via Pandoc (read from stdin to avoid temp-file permission issues)
@@ -72,8 +76,10 @@ def main():
         pdf_file = os.path.splitext(output_tex)[0] + ".pdf"
         if shutil.which('pdflatex') is not None:
             try:
+                # Run pdflatex with output directory set to LaTeX folder
+                tex_filename = os.path.basename(output_tex)
                 subprocess.run(
-                    ['pdflatex', '-interaction=nonstopmode', output_tex],
+                    ['pdflatex', '-interaction=nonstopmode', f'-output-directory={output_dir}', output_tex],
                     check=True,
                     env=env
                 )

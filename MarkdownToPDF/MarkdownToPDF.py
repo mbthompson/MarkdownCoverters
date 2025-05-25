@@ -47,9 +47,13 @@ def main():
     if not markdown_text.strip():
         sys.exit("No input received. Exiting.")
 
+    # Ensure output directory exists
+    output_dir = 'PDF'
+    os.makedirs(output_dir, exist_ok=True)
+    
     # Determine output PDF filename
     today_str = datetime.date.today().strftime('%Y%m%d')
-    default_pdf = f'{today_str}.pdf'
+    default_pdf = os.path.join(output_dir, f'{today_str}.pdf')
     output_pdf = get_unique_filename(default_pdf)
 
     # Convert Markdown to PDF via Pandoc (read from stdin to avoid temp-file permission issues)

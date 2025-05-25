@@ -12,5 +12,10 @@ __pycache__/
 *.fls
 *.fdb_latexmk
 
+# ignore output folders
+PDF/
+DOCX/
+LaTeX/
+
 # macOS
 .DS_Store
