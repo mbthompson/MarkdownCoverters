@@ -12,12 +12,14 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from markdown_utils import (
     check_pandoc, check_pdflatex, get_markdown_input, ensure_output_dir, 
-    get_dated_filename, run_pandoc, run_pdflatex, save_markdown_file
+    get_dated_filename, run_pandoc, run_pdflatex, save_markdown_file,
+    load_config, build_pandoc_args
 )
 
 def main():
-    # Ensure pandoc is available
+    # Ensure pandoc is available and load configuration
     check_pandoc()
+    config = load_config()
 
     # Get Markdown input from user
     markdown_text = get_markdown_input()
@@ -27,28 +29,35 @@ def main():
     ensure_output_dir(output_dir)
     output_tex = get_dated_filename(output_dir, 'tex')
 
-    # Convert Markdown to LaTeX via Pandoc
-    run_pandoc(
-        ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-V', 'geometry:margin=1in', '-o', output_tex],
-        markdown_text
-    )
+    # Build pandoc arguments with configuration
+    base_args = ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-o', output_tex]
+    pandoc_args = build_pandoc_args(base_args, config['latex'])
     
-    # Save the markdown source file
-    md_file = save_markdown_file(markdown_text, output_tex)
+    # Convert Markdown to LaTeX via Pandoc
+    run_pandoc(pandoc_args, markdown_text)
+    
+    # Save the markdown source file if configured
+    if config['global']['save_markdown_source']:
+        md_file = save_markdown_file(markdown_text, output_tex)
+        if md_file:
+            print(f"Markdown saved: {md_file}")
     
     print(f"LaTeX created: {output_tex}")
-    if md_file:
-        print(f"Markdown saved: {md_file}")
     
-    # Attempt to compile the generated .tex to PDF
-    if check_pdflatex():
+    # Check if PDF compilation should be attempted
+    has_pdflatex = check_pdflatex()
+    should_compile = config['latex'].get('compile_pdf', True) and has_pdflatex
+    
+    if should_compile:
         success, pdf_file = run_pdflatex(output_tex, output_dir)
         if success:
             print(f"PDF created: {pdf_file}")
         else:
             sys.exit(f"Error: pdflatex failed.")
-    else:
+    elif not has_pdflatex:
         print("Warning: pdflatex not found; skipping PDF compilation.")
+    else:
+        print("Info: PDF compilation disabled in configuration.")
 
 if __name__ == '__main__':
     main()

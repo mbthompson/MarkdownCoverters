@@ -12,12 +12,14 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from markdown_utils import (
     check_pandoc, get_markdown_input, ensure_output_dir, 
-    get_dated_filename, run_pandoc, save_markdown_file
+    get_dated_filename, run_pandoc, save_markdown_file,
+    load_config, build_pandoc_args
 )
 
 def main():
-    # Ensure pandoc is available
+    # Ensure pandoc is available and load configuration
     check_pandoc()
+    config = load_config()
 
     # Get Markdown input from user
     markdown_text = get_markdown_input()
@@ -27,18 +29,20 @@ def main():
     ensure_output_dir(output_dir)
     output_pdf = get_dated_filename(output_dir, 'pdf')
 
-    # Convert Markdown to PDF via Pandoc
-    run_pandoc(
-        ['pandoc', '-f', 'markdown', '-V', 'geometry:margin=1in', '-o', output_pdf],
-        markdown_text
-    )
+    # Build pandoc arguments with configuration
+    base_args = ['pandoc', '-f', 'markdown', '-o', output_pdf]
+    pandoc_args = build_pandoc_args(base_args, config['pdf'])
     
-    # Save the markdown source file
-    md_file = save_markdown_file(markdown_text, output_pdf)
+    # Convert Markdown to PDF via Pandoc
+    run_pandoc(pandoc_args, markdown_text)
+    
+    # Save the markdown source file if configured
+    if config['global']['save_markdown_source']:
+        md_file = save_markdown_file(markdown_text, output_pdf)
+        if md_file:
+            print(f"Markdown saved: {md_file}")
     
     print(f"PDF created: {output_pdf}")
-    if md_file:
-        print(f"Markdown saved: {md_file}")
 
 if __name__ == '__main__':
     main()
