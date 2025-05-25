@@ -87,7 +87,7 @@ def main():
     print("🔧 Markdown Converter Configuration Generator")
     print("=" * 50)
     
-    config_path = ".markdown-converter.json"
+    config_path = "markdown-converter.json"
     
     # Check if config already exists
     if os.path.exists(config_path):
