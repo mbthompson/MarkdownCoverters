@@ -163,8 +163,8 @@ def get_default_config():
                 "paper": "letter"
             },
             "font": {
-                "family": "Times New Roman",
-                "size": "12pt"
+                "family": "Latin Modern Roman",
+                "size": "10pt"
             }
         },
         "docx": {
@@ -179,8 +179,8 @@ def get_default_config():
                 "paper": "letter"
             },
             "font": {
-                "family": "Times New Roman",
-                "size": "12pt"
+                "family": "Latin Modern Roman",
+                "size": "10pt"
             },
             "document_class": "article",
             "compile_pdf": True
