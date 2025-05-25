@@ -14,24 +14,15 @@
  ./MarkdownConverter.py
  ```
  
- ## Individual Tools
+ ## Legacy Individual Tools
  
- Each tool lives in its own subdirectory with detailed instructions:
+ The original individual tools are preserved in the `legacy/` folder for users who prefer single-format converters or need them for scripting:
  
- - **MarkdownToPDF/**
-   - Converts Markdown to PDF with 1-inch margins.
-   - Uses `pandoc -t pdf` under the hood.
-   - See `MarkdownToPDF/README.md` for installation and usage.
+ - **legacy/MarkdownToPDF/** - PDF-only converter
+ - **legacy/MarkdownToWord/** - Word-only converter  
+ - **legacy/MarkdownToLatex/** - LaTeX-only converter
  
- - **MarkdownToWord/**
-   - Converts Markdown to Word (`.docx`).
-   - Uses `pandoc -t docx`.
-   - See `MarkdownToWord/README.md` for installation and usage.
- 
- - **MarkdownToLatex/**
-   - Converts Markdown to LaTeX (`.tex`) and compiles to PDF with 1-inch margins.
-   - Uses `pandoc -t latex` and `pdflatex`.
-   - See `MarkdownToLatex/README.md` for installation and usage.
+ Each maintains its original functionality and documentation.
  
  ## Prerequisites
  
