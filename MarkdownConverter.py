@@ -9,31 +9,17 @@ For LaTeX output, also requires pdflatex.
 """
 import sys
 import os
-import shutil
 import subprocess
-import datetime
-
-def get_unique_filename(basename):
-    """
-    Generate a filename that does not overwrite existing files.
-    E.g., for basename 'PDF/20250525.pdf', returns 'PDF/20250525.pdf' or 'PDF/20250525-1.pdf', etc.
-    """
-    base, ext = os.path.splitext(basename)
-    filename = basename
-    index = 1
-    while os.path.exists(filename):
-        filename = f"{base}-{index}{ext}"
-        index += 1
-    return filename
+from markdown_utils import (
+    get_unique_filename, check_pandoc, check_pdflatex, 
+    get_markdown_input, ensure_output_dir, get_dated_filename, 
+    run_pandoc, run_pdflatex
+)
 
 def check_dependencies():
     """Check if required dependencies are available."""
-    if shutil.which('pandoc') is None:
-        sys.exit("Error: pandoc not found. Please install pandoc and retry.")
-    
-    # Check for pdflatex (only needed for LaTeX, but good to know)
-    has_pdflatex = shutil.which('pdflatex') is not None
-    return has_pdflatex
+    check_pandoc()
+    return check_pdflatex()
 
 def get_user_choice():
     """Display menu and get user's choice for output format."""
@@ -58,119 +44,61 @@ def get_user_choice():
             print("\nExiting...")
             sys.exit(0)
 
-def get_markdown_input():
-    """Get Markdown text from user input."""
+def get_markdown_input_with_prompt():
+    """Get Markdown text from user input with custom prompt."""
     print("\nEnter/paste your Markdown text.")
     print("Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):")
     print("-" * 60)
     
-    try:
-        markdown_text = sys.stdin.read()
-    except KeyboardInterrupt:
-        sys.exit("\nInput cancelled. Exiting.")
-    
-    if not markdown_text.strip():
-        sys.exit("No input received. Exiting.")
-    
-    return markdown_text
+    return get_markdown_input()
 
 def convert_to_pdf(markdown_text):
     """Convert Markdown to PDF."""
-    # Ensure output directory exists
     output_dir = 'PDF'
-    os.makedirs(output_dir, exist_ok=True)
+    ensure_output_dir(output_dir)
+    output_pdf = get_dated_filename(output_dir, 'pdf')
     
-    # Determine output PDF filename
-    today_str = datetime.date.today().strftime('%Y%m%d')
-    default_pdf = os.path.join(output_dir, f'{today_str}.pdf')
-    output_pdf = get_unique_filename(default_pdf)
-    
-    # Convert Markdown to PDF via Pandoc
-    try:
-        env = os.environ.copy()
-        env['TMPDIR'] = os.getcwd()
-        subprocess.run(
-            ['pandoc', '-f', 'markdown', '-V', 'geometry:margin=1in', '-o', output_pdf],
-            input=markdown_text.encode('utf-8'),
-            check=True,
-            env=env
-        )
-    except subprocess.CalledProcessError as e:
-        sys.exit(f"Error: pandoc failed with exit code {e.returncode}.")
-    except Exception as e:
-        sys.exit(f"An error occurred: {e}")
+    run_pandoc(
+        ['pandoc', '-f', 'markdown', '-V', 'geometry:margin=1in', '-o', output_pdf],
+        markdown_text
+    )
     
     return output_pdf
 
 def convert_to_word(markdown_text):
     """Convert Markdown to Word (DOCX)."""
-    # Ensure output directory exists
     output_dir = 'DOCX'
-    os.makedirs(output_dir, exist_ok=True)
+    ensure_output_dir(output_dir)
+    output_docx = get_dated_filename(output_dir, 'docx')
     
-    # Determine output DOCX filename
-    today_str = datetime.date.today().strftime('%Y%m%d')
-    default_docx = os.path.join(output_dir, f'{today_str}.docx')
-    output_docx = get_unique_filename(default_docx)
-    
-    # Convert Markdown to DOCX via Pandoc
-    try:
-        env = os.environ.copy()
-        env['TMPDIR'] = os.getcwd()
-        subprocess.run(
-            ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx],
-            input=markdown_text.encode('utf-8'),
-            check=True,
-            env=env
-        )
-    except subprocess.CalledProcessError as e:
-        sys.exit(f"Error: pandoc failed with exit code {e.returncode}.")
-    except Exception as e:
-        sys.exit(f"An error occurred: {e}")
+    run_pandoc(
+        ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx],
+        markdown_text
+    )
     
     return output_docx
 
 def convert_to_latex(markdown_text, has_pdflatex):
     """Convert Markdown to LaTeX and optionally compile to PDF."""
-    # Ensure output directory exists
     output_dir = 'LaTeX'
-    os.makedirs(output_dir, exist_ok=True)
+    ensure_output_dir(output_dir)
+    output_tex = get_dated_filename(output_dir, 'tex')
     
-    # Determine output TEX filename
-    today_str = datetime.date.today().strftime('%Y%m%d')
-    default_tex = os.path.join(output_dir, f'{today_str}.tex')
-    output_tex = get_unique_filename(default_tex)
-    
-    # Convert Markdown to LaTeX via Pandoc
-    try:
-        env = os.environ.copy()
-        env['TMPDIR'] = os.getcwd()
-        subprocess.run(
-            ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-V', 'geometry:margin=1in', '-o', output_tex],
-            input=markdown_text.encode('utf-8'),
-            check=True,
-            env=env
-        )
-    except subprocess.CalledProcessError as e:
-        sys.exit(f"Error: pandoc failed with exit code {e.returncode}.")
-    except Exception as e:
-        sys.exit(f"An error occurred: {e}")
+    run_pandoc(
+        ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-V', 'geometry:margin=1in', '-o', output_tex],
+        markdown_text
+    )
     
     print(f"✅ LaTeX created: {output_tex}")
     
     # Attempt to compile the generated .tex to PDF
     if has_pdflatex:
-        pdf_file = os.path.splitext(output_tex)[0] + ".pdf"
-        try:
-            subprocess.run(
-                ['pdflatex', '-interaction=nonstopmode', f'-output-directory={output_dir}', output_tex],
-                check=True,
-                env=env
-            )
+        success, pdf_file = run_pdflatex(output_tex, output_dir)
+        if success:
             print(f"✅ PDF created: {pdf_file}")
             return output_tex, pdf_file
-        except subprocess.CalledProcessError as e:
-            print(f"⚠️  Warning: pdflatex failed with exit code {e.returncode}.")
+        else:
+            print(f"⚠️  Warning: pdflatex failed.")
             print(f"LaTeX file created successfully: {output_tex}")
             return output_tex, None
     else:
@@ -191,7 +119,7 @@ def main():
             sys.exit(0)
         
         # Get markdown input
-        markdown_text = get_markdown_input()
+        markdown_text = get_markdown_input_with_prompt()
         
         print("\n🔄 Converting...")
         
