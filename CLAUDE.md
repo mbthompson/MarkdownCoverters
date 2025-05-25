@@ -12,6 +12,8 @@ This is a Markdown Conversion Toolkit with a **unified interactive converter** a
   - Interactive format selection (1=PDF, 2=Word, 3=LaTeX)
   - Continuous operation mode for multiple conversions
   - Comprehensive error handling and dependency checking
+- **MarkdownConverter.app**: macOS app bundle for desktop integration
+- **MarkdownConverter.scpt**: AppleScript source for the launcher
 
 ### Legacy Tools (in legacy/ folder)
 - **legacy/MarkdownToPDF/**: PDF-only converter (uses `pandoc -t pdf`)
@@ -63,6 +65,10 @@ Key functions across all tools:
 
 # Make executable if needed
 chmod +x MarkdownConverter.py
+
+# macOS desktop integration
+open MarkdownConverter.app
+# Or double-click MarkdownConverter.app in Finder
 ```
 
 ### Legacy Tools (for scripting/automation)
@@ -138,4 +144,5 @@ from MarkdownConverter import convert_to_pdf, convert_to_word, convert_to_latex,
 - All tools maintain backward compatibility
 - Output folders are shared between unified and legacy tools
 - File naming conventions are consistent across all tools
-- macOS .app bundles in legacy tools provide desktop integration
+- macOS .app bundles provide desktop integration for both unified and legacy tools
+- AppleScript source files (.scpt) allow customization of launcher behavior

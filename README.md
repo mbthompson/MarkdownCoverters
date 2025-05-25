@@ -13,6 +13,8 @@
  ```bash
  ./MarkdownConverter.py
  ```
+
+ **macOS Desktop Integration**: Double-click `MarkdownConverter.app` to open Terminal and automatically run the unified converter.
  
  ## Legacy Individual Tools
  

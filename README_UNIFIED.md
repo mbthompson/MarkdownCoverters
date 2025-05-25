@@ -35,6 +35,13 @@ Simply run the converter and follow the prompts:
 ./MarkdownConverter.py
 ```
 
+### macOS Desktop Integration
+
+For macOS users, desktop integration is available:
+
+- **MarkdownConverter.app**: Double-click this app to open Terminal and automatically run the unified converter
+- **MarkdownConverter.scpt**: The AppleScript source file for the launcher (can be edited in Script Editor)
+
 ### Step-by-step Process
 
 1. **Launch the tool**:
