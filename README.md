@@ -1,6 +1,20 @@
  # Markdown Conversion Toolkit
  
- This repository provides three simple, standalone CLI tools for converting Markdown into common document formats using Pandoc (and pdflatex for LaTeX/PDF).
+ This repository provides both a **unified interactive converter** and three standalone CLI tools for converting Markdown into common document formats using Pandoc (and pdflatex for LaTeX/PDF).
+ 
+ ## 🆕 Unified Converter (Recommended)
+ 
+ **MarkdownConverter.py** - A single interactive tool for all conversions:
+ - Interactive menu to choose output format (PDF, Word, LaTeX)
+ - Paste your Markdown and get instant conversion
+ - Organized output folders with date-based naming
+ - See `README_UNIFIED.md` for complete documentation
+ 
+ ```bash
+ ./MarkdownConverter.py
+ ```
+ 
+ ## Individual Tools
  
  Each tool lives in its own subdirectory with detailed instructions:
  
