@@ -1,6 +1,7 @@
 {
   "global": {
-    "save_markdown_source": true
+    "save_markdown_source": true,
+    "auto_open_output": true
   },
   "pdf": {
     "geometry": {
