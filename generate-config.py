@@ -24,7 +24,7 @@ def generate_config_file(filepath="markdown-converter.json"):
             "save_markdown_source": config["global"]["save_markdown_source"],
             "_save_markdown_source_comment": "Save input markdown as .md file alongside converted output",
             "auto_open_output": config["global"]["auto_open_output"],
-            "_auto_open_output_comment": "Automatically open converted files after conversion",
+            "_auto_open_output_comment": "Automatically open converted files after conversion (set to false to disable)",
             "output_naming": config["global"]["output_naming"],
             "_output_naming_comment": "Naming scheme: 'date' (YYYYMMDD), 'prompt' (ask user), 'custom' (not implemented)"
         },

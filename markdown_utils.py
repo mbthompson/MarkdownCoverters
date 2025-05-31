@@ -177,7 +177,7 @@ def get_default_config():
     return {
         "global": {
             "save_markdown_source": True,
-            "auto_open_output": False,
+            "auto_open_output": True,
             "output_naming": "date"
         },
         "pdf": {
