@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from markdown_utils import (
     check_pandoc, get_markdown_input, ensure_output_dir, 
     get_dated_filename, run_pandoc, save_markdown_file,
-    load_config, build_pandoc_args, open_file
+    load_config, build_pandoc_args
 )
 
 def main():
@@ -43,8 +43,6 @@ def main():
             print(f"Markdown saved: {md_file}")
     
     print(f"PDF created: {output_pdf}")
-    if config['global'].get('auto_open_output'):
-        open_file(output_pdf)
 
 if __name__ == '__main__':
     main()

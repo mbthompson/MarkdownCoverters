@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from markdown_utils import (
     check_pandoc, check_pdflatex, get_markdown_input, ensure_output_dir, 
     get_dated_filename, run_pandoc, run_pdflatex, save_markdown_file,
-    load_config, build_pandoc_args, open_file
+    load_config, build_pandoc_args
 )
 
 def main():
@@ -52,20 +52,12 @@ def main():
         success, pdf_file = run_pdflatex(output_tex, output_dir)
         if success:
             print(f"PDF created: {pdf_file}")
-            if config['global'].get('auto_open_output'):
-                open_file(pdf_file)
         else:
-            if config['global'].get('auto_open_output'):
-                open_file(output_tex)
             sys.exit(f"Error: pdflatex failed.")
     elif not has_pdflatex:
         print("Warning: pdflatex not found; skipping PDF compilation.")
-        if config['global'].get('auto_open_output'):
-            open_file(output_tex)
     else:
         print("Info: PDF compilation disabled in configuration.")
-        if config['global'].get('auto_open_output'):
-            open_file(output_tex)
 
 if __name__ == '__main__':
     main()
