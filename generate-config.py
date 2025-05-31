@@ -3,13 +3,13 @@
 Configuration Generator for Markdown Converter Toolkit
 
 Creates a default configuration file with user-friendly comments.
-Run this script to generate .markdown-converter.json in your current directory.
+Run this script to generate markdown-converter.json in your current directory.
 """
 import json
 import os
 from markdown_utils import get_default_config
 
-def generate_config_file(filepath=".markdown-converter.json"):
+def generate_config_file(filepath="markdown-converter.json"):
     """Generate a configuration file with default settings and comments."""
     
     config = get_default_config()
