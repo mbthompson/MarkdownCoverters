@@ -50,8 +50,8 @@ def get_markdown_input_with_prompt():
     print("\nEnter/paste your Markdown text.")
     print("Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):")
     print("-" * 60)
-    
-    return get_markdown_input()
+
+    return get_markdown_input(show_prompt=False)
 
 def convert_to_pdf(markdown_text, config=None):
     """Convert Markdown to PDF."""

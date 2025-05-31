@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import datetime
 import json
+import copy
 
 
 def get_unique_filename(basename):
@@ -38,14 +39,19 @@ def check_pdflatex():
     return shutil.which('pdflatex') is not None
 
 
-def get_markdown_input():
-    """Get Markdown text from user input via stdin."""
-    prompt = (
-        "Enter/paste your Markdown text.\n"
-        "Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):\n"
-    )
-    sys.stdout.write(prompt)
-    sys.stdout.flush()
+def get_markdown_input(show_prompt=True):
+    """Get Markdown text from user input via stdin.
+
+    Args:
+        show_prompt (bool): If True, display input instructions before reading.
+    """
+    if show_prompt:
+        prompt = (
+            "Enter/paste your Markdown text.\n"
+            "Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):\n"
+        )
+        sys.stdout.write(prompt)
+        sys.stdout.flush()
     
     try:
         markdown_text = sys.stdin.read()
@@ -185,7 +191,20 @@ def get_default_config():
             "document_class": "article",
             "compile_pdf": True
         }
-    }
+    } 
+
+
+def _merge_dicts(base, updates):
+    """Recursively merge two dictionaries (updates override base)."""
+    for key, value in updates.items():
+        if (
+            key in base
+            and isinstance(base[key], dict)
+            and isinstance(value, dict)
+        ):
+            _merge_dicts(base[key], value)
+        else:
+            base[key] = value
 
 
 def load_config():
@@ -203,7 +222,7 @@ def load_config():
         dict: Configuration settings
     """
     default_config = get_default_config()
-    
+
     # Try visible files first, then hidden files for backward compatibility
     config_paths = [
         "./markdown-converter.json",                      # Visible (new, preferred)
@@ -217,16 +236,9 @@ def load_config():
             try:
                 with open(config_path, 'r', encoding='utf-8') as f:
                     user_config = json.load(f)
-                    # Merge user config with defaults (user config takes precedence)
-                    merged_config = default_config.copy()
-                    for section, settings in user_config.items():
-                        if section in merged_config:
-                            if isinstance(settings, dict):
-                                merged_config[section].update(settings)
-                            else:
-                                merged_config[section] = settings
-                        else:
-                            merged_config[section] = settings
+                    # Merge user config with defaults recursively
+                    merged_config = copy.deepcopy(default_config)
+                    _merge_dicts(merged_config, user_config)
                     return merged_config
             except (json.JSONDecodeError, IOError) as e:
                 print(f"Warning: Failed to load config from {config_path}: {e}")
