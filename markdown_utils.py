@@ -219,23 +219,19 @@ def load_config():
     Load configuration from file with fallback to defaults.
     
     Searches for config files in this order:
-    1. ./markdown-converter.json (current directory, visible)
-    2. ./.markdown-converter.json (current directory, hidden - legacy)
-    3. ~/markdown-converter.json (home directory, visible)
-    4. ~/.markdown-converter.json (home directory, hidden - legacy)
-    5. Default configuration (built-in)
+    1. ./markdown-converter.json (current directory)
+    2. ~/markdown-converter.json (home directory)
+    3. Default configuration (built-in)
     
     Returns:
         dict: Configuration settings
     """
     default_config = get_default_config()
     
-    # Try visible files first, then hidden files for backward compatibility
+    # Look for configuration in the current directory first, then the home directory
     config_paths = [
-        "./markdown-converter.json",                      # Visible (new, preferred)
-        "./.markdown-converter.json",                     # Hidden (legacy)
-        os.path.expanduser("~/markdown-converter.json"),  # Visible home (new)
-        os.path.expanduser("~/.markdown-converter.json")  # Hidden home (legacy)
+        "./markdown-converter.json",
+        os.path.expanduser("~/markdown-converter.json")
     ]
     
     for config_path in config_paths:
