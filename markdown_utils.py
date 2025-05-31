@@ -38,14 +38,17 @@ def check_pdflatex():
     return shutil.which('pdflatex') is not None
 
 
-def get_markdown_input():
+def get_markdown_input(prompt=None):
     """Get Markdown text from user input via stdin."""
-    prompt = (
-        "Enter/paste your Markdown text.\n"
-        "Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):\n"
-    )
-    sys.stdout.write(prompt)
-    sys.stdout.flush()
+    if prompt is None:
+        prompt = (
+            "Enter/paste your Markdown text.\n"
+            "Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):\n"
+        )
+
+    if prompt:
+        sys.stdout.write(prompt)
+        sys.stdout.flush()
     
     try:
         markdown_text = sys.stdin.read()

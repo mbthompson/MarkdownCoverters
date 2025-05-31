@@ -47,11 +47,13 @@ def get_user_choice():
 
 def get_markdown_input_with_prompt():
     """Get Markdown text from user input with custom prompt."""
-    print("\nEnter/paste your Markdown text.")
-    print("Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):")
-    print("-" * 60)
-    
-    return get_markdown_input()
+    prompt = (
+        "\nEnter/paste your Markdown text.\n"
+        "Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows):\n"
+        + "-" * 60 + "\n"
+    )
+
+    return get_markdown_input(prompt)
 
 def convert_to_pdf(markdown_text, config=None):
     """Convert Markdown to PDF."""
