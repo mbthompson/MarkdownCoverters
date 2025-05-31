@@ -14,7 +14,7 @@ from markdown_utils import (
     get_unique_filename, check_pandoc, check_pdflatex, 
     get_markdown_input, ensure_output_dir, get_dated_filename, 
     run_pandoc, run_pdflatex, save_markdown_file,
-    load_config, build_pandoc_args
+    load_config, build_pandoc_args, open_file
 )
 
 def check_dependencies():
@@ -76,6 +76,9 @@ def convert_to_pdf(markdown_text, config=None):
         if md_file:
             print(f"📝 Markdown saved: {md_file}")
     
+    if config['global'].get('auto_open_output'):
+        open_file(output_pdf)
+
     return output_pdf
 
 def convert_to_word(markdown_text, config=None):
@@ -99,6 +102,9 @@ def convert_to_word(markdown_text, config=None):
         if md_file:
             print(f"📝 Markdown saved: {md_file}")
     
+    if config['global'].get('auto_open_output'):
+        open_file(output_docx)
+
     return output_docx
 
 def convert_to_latex(markdown_text, has_pdflatex, config=None):
@@ -131,18 +137,26 @@ def convert_to_latex(markdown_text, has_pdflatex, config=None):
         success, pdf_file = run_pdflatex(output_tex, output_dir)
         if success:
             print(f"✅ PDF created: {pdf_file}")
+            if config['global'].get('auto_open_output'):
+                open_file(pdf_file)
             return output_tex, pdf_file
         else:
             print(f"⚠️  Warning: pdflatex failed.")
             print(f"LaTeX file created successfully: {output_tex}")
+            if config['global'].get('auto_open_output'):
+                open_file(output_tex)
             return output_tex, None
     elif not has_pdflatex:
         print("⚠️  Warning: pdflatex not found; skipping PDF compilation.")
         print(f"LaTeX file created successfully: {output_tex}")
+        if config['global'].get('auto_open_output'):
+            open_file(output_tex)
         return output_tex, None
     else:
         print("ℹ️  PDF compilation disabled in configuration.")
         print(f"LaTeX file created successfully: {output_tex}")
+        if config['global'].get('auto_open_output'):
+            open_file(output_tex)
         return output_tex, None
 
 def main():

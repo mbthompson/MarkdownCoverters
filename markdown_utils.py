@@ -152,6 +152,19 @@ def run_pdflatex(tex_file, output_dir):
         return False, None
 
 
+def open_file(path):
+    """Open a file using the default application for the current OS."""
+    try:
+        if sys.platform.startswith('darwin'):
+            subprocess.run(['open', path], check=False)
+        elif os.name == 'nt':
+            os.startfile(path)  # type: ignore[attr-defined]
+        else:
+            subprocess.run(['xdg-open', path], check=False)
+    except Exception:
+        pass
+
+
 def get_default_config():
     """Return default configuration settings."""
     return {

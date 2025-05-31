@@ -10,6 +10,7 @@ A single, interactive interface for converting Markdown to PDF, Word (DOCX), or 
 - **Date-based Naming**: Output files use YYYYMMDD format with anti-overwrite protection
 - **Dependency Checking**: Automatically detects required tools (Pandoc, pdflatex)
 - **Continuous Operation**: Convert multiple files in a single session
+- **Optional Auto-Open**: Automatically open converted files when enabled in the configuration
 
 ## Prerequisites
 
@@ -94,6 +95,11 @@ The tool automatically creates and organizes files into format-specific folders:
 - **Word files**: `DOCX/20250525.docx`, `DOCX/20250525-1.docx`, etc.
 - **LaTeX files**: `LaTeX/20250525.tex`, `LaTeX/20250525.pdf`, etc.
   - Includes compiled PDF and auxiliary files (.aux, .log)
+
+### Auto-Open Output
+
+Set `"auto_open_output": true` in your configuration file to launch each
+converted file automatically with the system's default application.
 
 ## Conversion Options
 

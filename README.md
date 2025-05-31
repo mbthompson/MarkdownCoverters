@@ -10,6 +10,7 @@ A streamlined toolkit for converting Markdown to PDF, Word (DOCX), and LaTeX for
 - **Anti-overwrite protection** with automatic file naming
 - **macOS desktop integration** via .app bundles
 - **No external Python dependencies** - uses only standard library + pandoc/pdflatex
+- **Optional auto-open** to launch converted files automatically
 
 ## 🆕 Unified Converter (Recommended)
 
@@ -94,8 +95,14 @@ python3 -c "from markdown_utils import check_pandoc; check_pandoc(); print('✅ 
 
 All tools create organized output folders:
 - **PDF/**: PDF files with date-based naming (e.g., `20250525.pdf`, `20250525-1.pdf`)
-- **DOCX/**: Word documents 
+- **DOCX/**: Word documents
 - **LaTeX/**: LaTeX source files and compiled PDFs
+
+### Auto-Open Output
+
+Set `"auto_open_output": true` in `markdown-converter.json` to automatically
+open each converted file with your system's default viewer. Generate a sample
+config with `generate-config.py` if needed.
 
 ## 🔍 For Developers
 
