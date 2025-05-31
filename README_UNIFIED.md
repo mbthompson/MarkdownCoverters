@@ -10,7 +10,7 @@ A single, interactive interface for converting Markdown to PDF, Word (DOCX), or 
 - **Date-based Naming**: Output files use YYYYMMDD format with anti-overwrite protection
 - **Dependency Checking**: Automatically detects required tools (Pandoc, pdflatex)
 - **Continuous Operation**: Convert multiple files in a single session
-- **Optional Auto-Open**: Automatically open converted files when enabled in the configuration
+- **Optional Auto-Open** (macOS): Automatically open PDFs in Preview and DOCX files in Microsoft Word (enabled when using this unified converter)
 
 ## Prerequisites
 
@@ -99,7 +99,8 @@ The tool automatically creates and organizes files into format-specific folders:
 ### Auto-Open Output
 
 Set `"auto_open_output": true` in your configuration file to launch each
-converted file automatically with the system's default application.
+converted file automatically when using this tool. On **macOS**, PDFs open in
+**Preview** and DOCX files open in **Microsoft Word**.
 
 ## Conversion Options
 

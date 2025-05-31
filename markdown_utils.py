@@ -155,12 +155,19 @@ def run_pdflatex(tex_file, output_dir):
 def open_file(path):
     """Open a file using the default application for the current OS."""
     try:
+        abs_path = os.path.abspath(path)
         if sys.platform.startswith('darwin'):
-            subprocess.run(['open', path], check=False)
+            ext = os.path.splitext(abs_path)[1].lower()
+            if ext == '.pdf':
+                subprocess.run(['open', '-a', 'Preview', abs_path], check=False)
+            elif ext == '.docx':
+                subprocess.run(['open', '-a', 'Microsoft Word', abs_path], check=False)
+            else:
+                subprocess.run(['open', abs_path], check=False)
         elif os.name == 'nt':
-            os.startfile(path)  # type: ignore[attr-defined]
+            os.startfile(abs_path)  # type: ignore[attr-defined]
         else:
-            subprocess.run(['xdg-open', path], check=False)
+            subprocess.run(['xdg-open', abs_path], check=False)
     except Exception:
         pass
 
