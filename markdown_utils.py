@@ -191,6 +191,16 @@ def get_default_config():
     }
 
 
+def deep_merge(base, override):
+    """Recursively merge two dictionaries (override into base)."""
+    for key, value in override.items():
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            deep_merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+
 def load_config():
     """
     Load configuration from file with fallback to defaults.
@@ -220,16 +230,8 @@ def load_config():
             try:
                 with open(config_path, 'r', encoding='utf-8') as f:
                     user_config = json.load(f)
-                    # Merge user config with defaults (user config takes precedence)
-                    merged_config = default_config.copy()
-                    for section, settings in user_config.items():
-                        if section in merged_config:
-                            if isinstance(settings, dict):
-                                merged_config[section].update(settings)
-                            else:
-                                merged_config[section] = settings
-                        else:
-                            merged_config[section] = settings
+                    # Merge user config with defaults using deep merge
+                    merged_config = deep_merge(default_config.copy(), user_config)
                     return merged_config
             except (json.JSONDecodeError, IOError) as e:
                 print(f"Warning: Failed to load config from {config_path}: {e}")
