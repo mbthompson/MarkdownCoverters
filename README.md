@@ -19,7 +19,7 @@ A streamlined toolkit for converting Markdown to PDF, Word (DOCX), and LaTeX for
 **MarkdownConverter.py** - Interactive tool for all conversions:
 - Interactive menu to choose output format (PDF, Word, LaTeX)
 - Paste your Markdown and get instant conversion
-- Organized output folders with date-based naming
+ - Organized output folders with date plus snippet naming
 - Built on shared `markdown_utils.py` module
 
 ```bash
@@ -95,8 +95,8 @@ python3 -c "from markdown_utils import check_pandoc; check_pandoc(); print('✅ 
 
 ## 📁 Output Organization
 
-All tools create organized output folders:
-- **PDF/**: PDF files with date-based naming (e.g., `20250525.pdf`, `20250525-1.pdf`)
+- All tools create organized output folders:
+- **PDF/**: PDF files named with the date and first six words (e.g., `20250525HelloWorldThisIsMy.pdf`)
 - **DOCX/**: Word documents
 - **LaTeX/**: LaTeX source files and compiled PDFs
 

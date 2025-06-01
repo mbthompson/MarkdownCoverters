@@ -27,7 +27,7 @@ def main():
     # Setup output
     output_dir = 'LaTeX'
     ensure_output_dir(output_dir)
-    output_tex = get_dated_filename(output_dir, 'tex')
+    output_tex = get_dated_filename(output_dir, 'tex', markdown_text)
 
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-o', output_tex]

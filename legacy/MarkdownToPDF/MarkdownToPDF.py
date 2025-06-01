@@ -27,7 +27,7 @@ def main():
     # Setup output
     output_dir = 'PDF'
     ensure_output_dir(output_dir)
-    output_pdf = get_dated_filename(output_dir, 'pdf')
+    output_pdf = get_dated_filename(output_dir, 'pdf', markdown_text)
 
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-o', output_pdf]

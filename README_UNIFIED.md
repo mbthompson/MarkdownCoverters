@@ -81,7 +81,7 @@ For macOS users, desktop integration is available:
 4. **Get your converted file**:
    ```
    🔄 Converting...
-   ✅ PDF created: PDF/20250525.pdf
+   ✅ PDF created: PDF/20250525HelloWorldThisIsMy.pdf
    
    ============================================================
    Convert another file? (y/N): 
@@ -91,9 +91,9 @@ For macOS users, desktop integration is available:
 
 The tool automatically creates and organizes files into format-specific folders:
 
-- **PDF files**: `PDF/20250525.pdf`, `PDF/20250525-1.pdf`, etc.
-- **Word files**: `DOCX/20250525.docx`, `DOCX/20250525-1.docx`, etc.
-- **LaTeX files**: `LaTeX/20250525.tex`, `LaTeX/20250525.pdf`, etc.
+- **PDF files**: `PDF/20250525HelloWorldThisIsMy.pdf`, `PDF/20250525HelloWorldThisIsMy-1.pdf`, etc.
+- **Word files**: `DOCX/20250525HelloWorldThisIsMy.docx`, `DOCX/20250525HelloWorldThisIsMy-1.docx`, etc.
+- **LaTeX files**: `LaTeX/20250525HelloWorldThisIsMy.tex`, `LaTeX/20250525HelloWorldThisIsMy.pdf`, etc.
   - Includes compiled PDF and auxiliary files (.aux, .log)
 
 ### Auto-Open Output
@@ -125,9 +125,9 @@ behavior. On **macOS**, PDFs open in **Preview** and DOCX files open in
 ## Features in Detail
 
 ### Smart File Naming
-- Files are named with the current date (YYYYMMDD format)
+- Files include the date plus the first six words in CamelCase
 - Automatic increment suffix prevents overwrites
-- Example: `20250525.pdf`, `20250525-1.pdf`, `20250525-2.pdf`
+- Example: `20250525HelloWorldThisIsMy.pdf`, `20250525HelloWorldThisIsMy-1.pdf`
 
 ### Dependency Management
 - Checks for Pandoc on startup (required)
@@ -191,7 +191,7 @@ Enter/paste your Markdown text:
 [Ctrl-D]
 
 🔄 Converting...
-✅ DOCX created: DOCX/20250525.docx
+✅ DOCX created: DOCX/20250525HelloWorldThisIsMy.docx
 
 Convert another file? (y/N): n
 👋 Goodbye!

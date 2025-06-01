@@ -11,12 +11,14 @@ import shutil
 import subprocess
 import datetime
 import json
+import re
 
 
 def get_unique_filename(basename):
     """
     Generate a filename that does not overwrite existing files.
-    E.g., for basename 'PDF/20250525.pdf', returns 'PDF/20250525.pdf' or 'PDF/20250525-1.pdf', etc.
+    E.g., for basename 'PDF/20250525HelloWorld.pdf', returns
+    'PDF/20250525HelloWorld.pdf' or 'PDF/20250525HelloWorld-1.pdf', etc.
     """
     base, ext = os.path.splitext(basename)
     filename = basename
@@ -66,10 +68,21 @@ def ensure_output_dir(output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
 
-def get_dated_filename(output_dir, extension):
-    """Generate a date-based filename in the specified directory."""
+def get_snippet_slug(text, num_words=6):
+    """Return a CamelCase slug of the first `num_words` words in `text`."""
+    words = re.findall(r'[A-Za-z0-9]+', text)
+    snippet_words = words[:num_words]
+    return ''.join(word.capitalize() for word in snippet_words)
+
+
+def get_dated_filename(output_dir, extension, markdown_text=None):
+    """Generate a date-based filename, optionally appending a text snippet."""
     today_str = datetime.date.today().strftime('%Y%m%d')
-    default_file = os.path.join(output_dir, f'{today_str}.{extension}')
+
+    snippet = get_snippet_slug(markdown_text) if markdown_text else ''
+    base_name = f"{today_str}{snippet}"
+
+    default_file = os.path.join(output_dir, f"{base_name}.{extension}")
     return get_unique_filename(default_file)
 
 
@@ -79,7 +92,7 @@ def save_markdown_file(markdown_text, output_file_path):
     
     Args:
         markdown_text: String containing the markdown content
-        output_file_path: Path to the converted output file (e.g., 'PDF/20250525.pdf')
+        output_file_path: Path to the converted output file (e.g., 'PDF/20250525HelloWorld.pdf')
         
     Returns:
         str: Path to the saved markdown file

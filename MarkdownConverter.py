@@ -62,7 +62,7 @@ def convert_to_pdf(markdown_text, config=None):
     
     output_dir = 'PDF'
     ensure_output_dir(output_dir)
-    output_pdf = get_dated_filename(output_dir, 'pdf')
+    output_pdf = get_dated_filename(output_dir, 'pdf', markdown_text)
     
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-o', output_pdf]
@@ -88,7 +88,7 @@ def convert_to_word(markdown_text, config=None):
     
     output_dir = 'DOCX'
     ensure_output_dir(output_dir)
-    output_docx = get_dated_filename(output_dir, 'docx')
+    output_docx = get_dated_filename(output_dir, 'docx', markdown_text)
     
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx]
@@ -114,7 +114,7 @@ def convert_to_latex(markdown_text, has_pdflatex, config=None):
     
     output_dir = 'LaTeX'
     ensure_output_dir(output_dir)
-    output_tex = get_dated_filename(output_dir, 'tex')
+    output_tex = get_dated_filename(output_dir, 'tex', markdown_text)
     
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-o', output_tex]

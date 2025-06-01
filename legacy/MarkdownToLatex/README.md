@@ -34,7 +34,7 @@ Paste or type your Markdown into stdin, then end the input with EOF:
 
 Finish with Ctrl-D (Unix/macOS) or Ctrl-Z then Enter (Windows).
 
-After conversion, you will have both LaTeX and PDF files named with the current date in the `LaTeX/` folder.
+After conversion, you will have both LaTeX and PDF files named with the date and the first six words in the `LaTeX/` folder.
 
 ### File Mode
 
@@ -44,7 +44,7 @@ Pipe a Markdown file directly, then compile to PDF:
 cat mydoc.md | ./MarkdownToLatex.py
 ```
 
-Generated files: Files in `LaTeX/` folder named with current date (e.g. `LaTeX/20250525.tex`, or `LaTeX/20250525-1.tex`, etc.) and corresponding PDF.
+Generated files: Files in `LaTeX/` folder named with the date and first six words (e.g. `LaTeX/20250525HelloWorldThisIsMy.tex`, `LaTeX/20250525HelloWorldThisIsMy-1.tex`, etc.) and corresponding PDF.
 
 ## Example
 
@@ -56,8 +56,8 @@ Finish with Ctrl-D (Unix) or Ctrl-Z then Enter (Windows):
 
 This is *Markdown*.
 [Ctrl-D]
-LaTeX created: LaTeX/20250525.tex
-PDF created: LaTeX/20250525.pdf
+LaTeX created: LaTeX/20250525HelloWorldThisIsMy.tex
+PDF created: LaTeX/20250525HelloWorldThisIsMy.pdf
 ```
 ## macOS Launcher
 
