@@ -27,7 +27,7 @@ def main():
     # Setup output
     output_dir = 'DOCX'
     ensure_output_dir(output_dir)
-    output_docx = get_dated_filename(output_dir, 'docx')
+    output_docx = get_dated_filename(output_dir, 'docx', markdown_text)
 
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx]

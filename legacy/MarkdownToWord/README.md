@@ -39,7 +39,7 @@ Pipe a Markdown file directly:
 cat mydoc.md | ./MarkdownToWord.py
 ```
 
-Generated files: Files in `DOCX/` folder named with current date (e.g. `DOCX/20250525.docx`, or `DOCX/20250525-1.docx`, etc.).
+Generated files: Files in `DOCX/` folder named with the date and the first six words (e.g. `DOCX/20250525HelloWorldThisIsMy.docx`, `DOCX/20250525HelloWorldThisIsMy-1.docx`, etc.).
 
 ## Example
 
@@ -51,7 +51,7 @@ Finish with Ctrl-D (Unix) or Ctrl-Z then Enter (Windows):
 
 This is *Markdown*.
 [Ctrl-D]
-DOCX created: DOCX/20250525.docx
+DOCX created: DOCX/20250525HelloWorldThisIsMy.docx
 ```
 ## macOS Launcher
 

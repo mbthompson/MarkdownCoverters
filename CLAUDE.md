@@ -65,7 +65,7 @@ Core functions used by all tools:
 #### File Management:
 - `get_unique_filename()`: Anti-overwrite protection with incremental suffixes
 - `ensure_output_dir()`: Creates output directories (PDF/, DOCX/, LaTeX/)
-- `get_dated_filename()`: YYYYMMDD-based naming with uniqueness
+- `get_dated_filename()`: Date + first six words in CamelCase with uniqueness
 
 #### Dependency Management:
 - `check_pandoc()`: Validates pandoc availability, exits if missing
