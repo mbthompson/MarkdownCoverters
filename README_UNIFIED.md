@@ -124,10 +124,10 @@ behavior. On **macOS**, PDFs open in **Preview** and DOCX files open in
 
 ## Features in Detail
 
-### Smart File Naming
-- Files include the date plus the first six words in CamelCase
+-### Smart File Naming
+- Files include the date plus a name you provide
 - Automatic increment suffix prevents overwrites
-- Example: `20250525HelloWorldThisIsMy.pdf`, `20250525HelloWorldThisIsMy-1.pdf`
+- Example: `20250525MyNotes.pdf`, `20250525MyNotes-1.pdf`
 
 ### Dependency Management
 - Checks for Pandoc on startup (required)
