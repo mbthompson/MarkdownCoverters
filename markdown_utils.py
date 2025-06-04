@@ -75,12 +75,16 @@ def get_snippet_slug(text, num_words=6):
     return ''.join(word.capitalize() for word in snippet_words)
 
 
-def get_dated_filename(output_dir, extension, markdown_text=None):
-    """Generate a date-based filename, optionally appending a text snippet."""
+def get_dated_filename(output_dir, extension, markdown_text=None, custom_slug=None):
+    """Generate a date-based filename with an optional custom slug."""
     today_str = datetime.date.today().strftime('%Y%m%d')
 
-    snippet = get_snippet_slug(markdown_text) if markdown_text else ''
-    base_name = f"{today_str}{snippet}"
+    if custom_slug:
+        slug = get_snippet_slug(custom_slug)
+    else:
+        slug = get_snippet_slug(markdown_text) if markdown_text else ''
+
+    base_name = f"{today_str}{slug}"
 
     default_file = os.path.join(output_dir, f"{base_name}.{extension}")
     return get_unique_filename(default_file)

@@ -55,14 +55,14 @@ def get_markdown_input_with_prompt():
 
     return get_markdown_input(prompt)
 
-def convert_to_pdf(markdown_text, config=None):
+def convert_to_pdf(markdown_text, config=None, slug=None):
     """Convert Markdown to PDF."""
     if config is None:
         config = load_config()
     
     output_dir = 'PDF'
     ensure_output_dir(output_dir)
-    output_pdf = get_dated_filename(output_dir, 'pdf', markdown_text)
+    output_pdf = get_dated_filename(output_dir, 'pdf', markdown_text, slug)
     
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-o', output_pdf]
@@ -81,14 +81,14 @@ def convert_to_pdf(markdown_text, config=None):
 
     return output_pdf
 
-def convert_to_word(markdown_text, config=None):
+def convert_to_word(markdown_text, config=None, slug=None):
     """Convert Markdown to Word (DOCX)."""
     if config is None:
         config = load_config()
     
     output_dir = 'DOCX'
     ensure_output_dir(output_dir)
-    output_docx = get_dated_filename(output_dir, 'docx', markdown_text)
+    output_docx = get_dated_filename(output_dir, 'docx', markdown_text, slug)
     
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx]
@@ -107,14 +107,14 @@ def convert_to_word(markdown_text, config=None):
 
     return output_docx
 
-def convert_to_latex(markdown_text, has_pdflatex, config=None):
+def convert_to_latex(markdown_text, has_pdflatex, config=None, slug=None):
     """Convert Markdown to LaTeX and optionally compile to PDF."""
     if config is None:
         config = load_config()
     
     output_dir = 'LaTeX'
     ensure_output_dir(output_dir)
-    output_tex = get_dated_filename(output_dir, 'tex', markdown_text)
+    output_tex = get_dated_filename(output_dir, 'tex', markdown_text, slug)
     
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-o', output_tex]
@@ -172,6 +172,12 @@ def main():
             print("👋 Goodbye!")
             sys.exit(0)
         
+        # Ask for optional file name to append after the date
+        slug_input = input(
+            "Enter a name to include in the output filename (optional): "
+        ).strip()
+        slug = slug_input if slug_input else None
+
         # Get markdown input
         markdown_text = get_markdown_input_with_prompt()
         
@@ -179,17 +185,17 @@ def main():
         
         try:
             if choice == '1':
-                output_file = convert_to_pdf(markdown_text, config)
+                output_file = convert_to_pdf(markdown_text, config, slug)
                 print(f"✅ PDF created: {output_file}")
             
             elif choice == '2':
-                output_file = convert_to_word(markdown_text, config)
+                output_file = convert_to_word(markdown_text, config, slug)
                 print(f"✅ DOCX created: {output_file}")
             
             elif choice == '3':
                 if not has_pdflatex and config['latex'].get('compile_pdf', True):
                     print("⚠️  Note: pdflatex not found. Only LaTeX file will be generated.")
-                tex_file, pdf_file = convert_to_latex(markdown_text, has_pdflatex, config)
+                tex_file, pdf_file = convert_to_latex(markdown_text, has_pdflatex, config, slug)
                 # Success messages are printed within the function
             
             print("\n" + "=" * 60)
