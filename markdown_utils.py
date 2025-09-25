@@ -123,23 +123,30 @@ def run_pandoc(command_args, markdown_text):
         markdown_text: String containing markdown content
         
     Returns:
-        None (raises SystemExit on failure)
+        bool: True if pandoc succeeded, False otherwise.
     """
     try:
         # Set TMPDIR to current directory for pandoc temp files
         env = os.environ.copy()
         env['TMPDIR'] = os.getcwd()
-        
-        subprocess.run(
+
+        result = subprocess.run(
             command_args,
             input=markdown_text.encode('utf-8'),
-            check=True,
-            env=env
+            env=env,
+            capture_output=True
         )
-    except subprocess.CalledProcessError as e:
-        sys.exit(f"Error: pandoc failed with exit code {e.returncode}.")
+
+        if result.returncode != 0:
+            # Print pandoc error output but continue execution
+            sys.stderr.write(result.stderr.decode('utf-8', errors='ignore'))
+            print(f"Warning: pandoc exited with code {result.returncode}.")
+            return False
+
+        return True
     except Exception as e:
-        sys.exit(f"An error occurred: {e}")
+        print(f"Warning: An error occurred while running pandoc: {e}")
+        return False
 
 
 def run_pdflatex(tex_file, output_dir):
@@ -158,14 +165,24 @@ def run_pdflatex(tex_file, output_dir):
     try:
         env = os.environ.copy()
         env['TMPDIR'] = os.getcwd()
-        
-        subprocess.run(
+
+        result = subprocess.run(
             ['pdflatex', '-interaction=nonstopmode', f'-output-directory={output_dir}', tex_file],
-            check=True,
-            env=env
+            env=env,
+            capture_output=True
         )
+
+        if result.returncode != 0:
+            # If pdflatex failed but produced a PDF, treat it as success
+            if os.path.exists(pdf_file):
+                sys.stderr.write(result.stderr.decode('utf-8', errors='ignore'))
+                print("Warning: pdflatex reported errors but a PDF was generated.")
+                return True, pdf_file
+            return False, None
+
         return True, pdf_file
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
+        print(f"Warning: pdflatex execution failed: {e}")
         return False, None
 
 

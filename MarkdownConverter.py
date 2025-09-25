@@ -67,16 +67,18 @@ def convert_to_pdf(markdown_text, config=None, slug=None):
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-o', output_pdf]
     pandoc_args = build_pandoc_args(base_args, config['pdf'])
-    
-    run_pandoc(pandoc_args, markdown_text)
-    
+
+    success = run_pandoc(pandoc_args, markdown_text)
+    if not success:
+        print(f"⚠️  Warning: pandoc reported errors while generating {output_pdf}.")
+
     # Save the markdown source file if configured
     if config['global']['save_markdown_source']:
         md_file = save_markdown_file(markdown_text, output_pdf)
         if md_file:
             print(f"📝 Markdown saved: {md_file}")
-    
-    if config['global'].get('auto_open_output'):
+
+    if config['global'].get('auto_open_output') and os.path.exists(output_pdf):
         open_file(output_pdf)
 
     return output_pdf
@@ -93,16 +95,18 @@ def convert_to_word(markdown_text, config=None, slug=None):
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-f', 'markdown', '-t', 'docx', '-o', output_docx]
     pandoc_args = build_pandoc_args(base_args, config['docx'])
-    
-    run_pandoc(pandoc_args, markdown_text)
-    
+
+    success = run_pandoc(pandoc_args, markdown_text)
+    if not success:
+        print(f"⚠️  Warning: pandoc reported errors while generating {output_docx}.")
+
     # Save the markdown source file if configured
     if config['global']['save_markdown_source']:
         md_file = save_markdown_file(markdown_text, output_docx)
         if md_file:
             print(f"📝 Markdown saved: {md_file}")
-    
-    if config['global'].get('auto_open_output'):
+
+    if config['global'].get('auto_open_output') and os.path.exists(output_docx):
         open_file(output_docx)
 
     return output_docx
@@ -119,10 +123,16 @@ def convert_to_latex(markdown_text, has_pdflatex, config=None, slug=None):
     # Build pandoc arguments with configuration
     base_args = ['pandoc', '-s', '-f', 'markdown', '-t', 'latex', '-o', output_tex]
     pandoc_args = build_pandoc_args(base_args, config['latex'])
-    
-    run_pandoc(pandoc_args, markdown_text)
-    
-    print(f"✅ LaTeX created: {output_tex}")
+
+    success = run_pandoc(pandoc_args, markdown_text)
+    if not success:
+        print(f"⚠️  Warning: pandoc reported errors while generating {output_tex}.")
+
+    if os.path.exists(output_tex):
+        print(f"✅ LaTeX created: {output_tex}")
+    else:
+        print(f"❌ Failed to create LaTeX file: {output_tex}")
+        return output_tex, None
     
     # Save the markdown source file if configured
     if config['global']['save_markdown_source']:
@@ -133,29 +143,29 @@ def convert_to_latex(markdown_text, has_pdflatex, config=None, slug=None):
     # Check if PDF compilation should be attempted (config setting and pdflatex availability)
     should_compile = config['latex'].get('compile_pdf', True) and has_pdflatex
     
-    if should_compile:
+    if should_compile and os.path.exists(output_tex):
         success, pdf_file = run_pdflatex(output_tex, output_dir)
         if success:
             print(f"✅ PDF created: {pdf_file}")
-            if config['global'].get('auto_open_output'):
+            if config['global'].get('auto_open_output') and os.path.exists(pdf_file):
                 open_file(pdf_file)
             return output_tex, pdf_file
         else:
             print(f"⚠️  Warning: pdflatex failed.")
             print(f"LaTeX file created successfully: {output_tex}")
-            if config['global'].get('auto_open_output'):
+            if config['global'].get('auto_open_output') and os.path.exists(output_tex):
                 open_file(output_tex)
             return output_tex, None
     elif not has_pdflatex:
         print("⚠️  Warning: pdflatex not found; skipping PDF compilation.")
         print(f"LaTeX file created successfully: {output_tex}")
-        if config['global'].get('auto_open_output'):
+        if config['global'].get('auto_open_output') and os.path.exists(output_tex):
             open_file(output_tex)
         return output_tex, None
     else:
         print("ℹ️  PDF compilation disabled in configuration.")
         print(f"LaTeX file created successfully: {output_tex}")
-        if config['global'].get('auto_open_output'):
+        if config['global'].get('auto_open_output') and os.path.exists(output_tex):
             open_file(output_tex)
         return output_tex, None
 
