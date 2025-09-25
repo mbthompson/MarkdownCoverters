@@ -11,10 +11,10 @@ import sys
 import os
 import subprocess
 from markdown_utils import (
-    get_unique_filename, check_pandoc, check_pdflatex, 
-    get_markdown_input, ensure_output_dir, get_dated_filename, 
+    get_unique_filename, check_pandoc, check_pdflatex,
+    get_markdown_input, ensure_output_dir, get_dated_filename,
     run_pandoc, run_pdflatex, save_markdown_file,
-    load_config, build_pandoc_args, open_file
+    load_config, build_pandoc_args, open_file, sanitize_text
 )
 
 def check_dependencies():
@@ -59,7 +59,10 @@ def convert_to_pdf(markdown_text, config=None, slug=None):
     """Convert Markdown to PDF."""
     if config is None:
         config = load_config()
-    
+
+    # Remove unsupported characters before conversion
+    markdown_text = sanitize_text(markdown_text)
+
     output_dir = 'PDF'
     ensure_output_dir(output_dir)
     output_pdf = get_dated_filename(output_dir, 'pdf', markdown_text, slug)
@@ -87,7 +90,10 @@ def convert_to_word(markdown_text, config=None, slug=None):
     """Convert Markdown to Word (DOCX)."""
     if config is None:
         config = load_config()
-    
+
+    # Remove unsupported characters before conversion
+    markdown_text = sanitize_text(markdown_text)
+
     output_dir = 'DOCX'
     ensure_output_dir(output_dir)
     output_docx = get_dated_filename(output_dir, 'docx', markdown_text, slug)
@@ -115,7 +121,10 @@ def convert_to_latex(markdown_text, has_pdflatex, config=None, slug=None):
     """Convert Markdown to LaTeX and optionally compile to PDF."""
     if config is None:
         config = load_config()
-    
+
+    # Remove unsupported characters before conversion
+    markdown_text = sanitize_text(markdown_text)
+
     output_dir = 'LaTeX'
     ensure_output_dir(output_dir)
     output_tex = get_dated_filename(output_dir, 'tex', markdown_text, slug)

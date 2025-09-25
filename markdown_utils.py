@@ -334,3 +334,23 @@ def build_pandoc_args(base_args, format_config):
             args.extend(['-V', f'fontsize:{size}'])
     
     return args
+
+def sanitize_text(text):
+    """
+    Remove non-ASCII characters from text to avoid unsupported character conversion errors.
+    """
+    # First replace known Unicode symbols with ASCII equivalents
+    replacements = {
+        '≠': '!=',
+        '≤': '<=',
+        '≥': '>=',
+        '≈': '~=',
+        '–': '-',
+        '—': '--',
+        '‘': "'", '’': "'",
+        '“': '"', '”': '"',
+    }
+    for orig, repl in replacements.items():
+        text = text.replace(orig, repl)
+    # Drop any other non-ASCII characters
+    return text.encode('ascii', 'ignore').decode('ascii')

@@ -3,7 +3,7 @@ import subprocess
 import subprocess
 from unittest.mock import patch
 
-from markdown_utils import run_pandoc, run_pdflatex
+from markdown_utils import run_pandoc, run_pdflatex, sanitize_text
 
 
 def test_run_pandoc_returns_false_on_error(tmp_path):
@@ -42,3 +42,15 @@ def test_run_pdflatex_error_no_pdf(tmp_path):
 
     assert not success
     assert result_pdf is None
+
+def test_sanitize_text_removes_non_ascii_and_emoji():
+    # Remove emoji and special characters, preserving ASCII content
+    assert sanitize_text("Hello 🐍!") == "Hello !"
+    # Em dash turns into two hyphens
+    assert sanitize_text("Café — Rocket 🚀!") == "Caf -- Rocket !"
+    # Common math and punctuation replacements
+    assert sanitize_text("a ≠ b") == "a != b"
+    assert sanitize_text("x ≤ y ≥ z") == "x <= y >= z"
+    # Approximately equal symbol
+    assert sanitize_text("a ≈ b") == "a ~= b"
+    assert sanitize_text("Quote: “text” and ‘more’") == "Quote: \"text\" and 'more'"
